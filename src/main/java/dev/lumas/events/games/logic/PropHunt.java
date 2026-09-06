@@ -24,6 +24,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
@@ -478,7 +479,8 @@ public final class PropHunt extends InventoryUnifiedMinigame {
          * rejected since disguising as one would make the hider invisible or nearly so.
          */
         private static boolean isValidDisguiseBlock(Material material) {
-            return material.isSolid() && material.isOccluding();
+            if (Tag.STAIRS.isTagged(material) || Tag.SLABS.isTagged(material)) return true;
+            return material.isSolid() && material.isOccluding() && material != Material.BARRIER;
         }
 
         @Override
