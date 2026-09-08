@@ -479,7 +479,7 @@ public final class PropHunt extends InventoryUnifiedMinigame {
          * rejected since disguising as one would make the hider invisible or nearly so.
          */
         private static boolean isValidDisguiseBlock(Material material) {
-            if (Tag.STAIRS.isTagged(material) || Tag.SLABS.isTagged(material)) return true;
+            if (Tag.STAIRS.isTagged(material)) return true;            
             return material.isSolid() && material.isOccluding() && material != Material.BARRIER;
         }
 
