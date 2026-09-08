@@ -17,6 +17,7 @@ import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import lombok.Setter;
 import me.kteq.hiddenarmor.HiddenArmorAPI;
+import com.dre.brewery.api.BreweryApi;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
@@ -55,8 +56,17 @@ public abstract class Minigame extends AsynchronousRunnable implements Listener 
         HIDDEN_ARMOR_AVAILABLE = available;
     }
 
-    protected static final Random RANDOM = Util.RANDOM;
+    private static final boolean BREWERY_X_AVAILABLE;
+    static {
+        boolean available = false;
+        try {
+            Class.forName("com.dre.brewery.api.BreweryApi");
+            available = true;
+        } catch (ClassNotFoundException ignored) {}
+        BREWERY_X_AVAILABLE = available;
+    }
 
+    protected static final Random RANDOM = Util.RANDOM;
 
     // Iterated from async and region threads while joins/leaves mutate it:
     protected final List<EventPlayer> participants = new CopyOnWriteArrayList<>();
@@ -149,6 +159,12 @@ public abstract class Minigame extends AsynchronousRunnable implements Listener 
         if (HIDDEN_ARMOR_AVAILABLE) {
             for (EventPlayer participant : this.participants) {
                 participant.operatePlayer(HiddenArmorAPI::forceShow);
+            }
+        }
+
+        if (BREWERY_X_AVAILABLE) {
+            for (EventPlayer participant : this.participants) {
+                participant.operatePlayer(player -> BreweryApi.setPlayerDrunk(player, 0, 0));
             }
         }
 
