@@ -4,6 +4,7 @@ import com.destroystokyo.paper.entity.Pathfinder;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.VanillaGoal;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.gamingmesh.jobs.commands.list.points;
 import dev.lumas.events.EventMain;
 import dev.lumas.events.configurable.sectors.IncursionDefinition;
 import dev.lumas.events.games.constants.MinigameConstant;
@@ -25,6 +26,7 @@ import io.papermc.paper.event.player.PlayerStopUsingItemEvent;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.val;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -105,6 +107,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -338,6 +341,10 @@ public final class Incursion extends InventoryUnifiedMinigame {
                 player.setSaturation(20f);
                 applySpeed(player);
                 equipKit(player, team);
+                participants.stream()
+                    .map(EventPlayer::getPlayer).filter(Objects::nonNull)
+                    .filter(p -> p != player && !p.hasMetadata("vanished"))
+                    .forEach(p -> player.showPlayer(EventMain.getInstance(), p));
             });
         }
         logSpeedState("game start");
