@@ -27,6 +27,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Registry;
 import org.bukkit.Sound;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -166,6 +167,10 @@ public abstract class Minigame extends AsynchronousRunnable implements Listener 
             for (EventPlayer participant : this.participants) {
                 participant.operatePlayer(player -> BreweryApi.setPlayerDrunk(player, 0, 0));
             }
+        }
+
+        for (EventPlayer participant : this.participants) {
+            participant.operatePlayer(LivingEntity::clearActivePotionEffects);
         }
 
         registerEvents(this);
